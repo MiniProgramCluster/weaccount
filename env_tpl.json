@@ -1,0 +1,26 @@
+{
+	"database": {
+		"host": "localhost",
+		"port": 3306,
+		"user": "root",
+		"password": "123456",
+		"database": "foobar",
+		"poolMaxOpen": 100,
+		"poolMaxIdle": 10
+	},
+	"apps": {
+		"appid-1232fdsfdsaewer": {
+			"appSecret": "123456------------------"
+		},
+		"appid-2232fdsfdsaewer": {
+			"appSecret": "123456------------------"
+		},
+		"appid-3232fdsfdsaewer": {
+			"appSecret": "123456------------------"
+		}
+	},
+	"token": {
+		"lifeTime": 86400,
+		"secret": "123456------------------"
+	}
+}
