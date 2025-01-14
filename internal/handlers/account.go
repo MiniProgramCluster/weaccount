@@ -73,8 +73,8 @@ func AuthHandler(w http.ResponseWriter, r *http.Request) {
 	unionID := wxResp.UnionID
 	sessionKey := wxResp.SessionKey
 	logCtx = logCtx.With().Str("openid", openID).Str("unionid", unionID).Logger()
-	sql := "insert into users (openid, unionid, session_key) values (?, ?, ?) on duplicate key update session_key = ?"
-	_, err = db.Instance().Exec(sql, openID, unionID, sessionKey, sessionKey)
+	sql := "insert into users (appid, openid, unionid, session_key) values (?, ?, ?, ?) on duplicate key update session_key = ?"
+	_, err = db.Instance().Exec(sql, appConf.AppID, openID, unionID, sessionKey, sessionKey)
 	if err != nil {
 		logCtx.Error().Err(err).Msg("Failed to insert user")
 		http.Error(w, "Failed to insert user", http.StatusInternalServerError)
