@@ -100,34 +100,17 @@ func AuthHandler(w http.ResponseWriter, r *http.Request) {
 		Type  string `json:"type"`
 		jwt.RegisteredClaims
 	}
-	var referralClamis struct {
-		UID   uint64 `json:"uid"`
-		AppID string `json:"appid"`
-		Type  string `json:"type"`
-		jwt.RegisteredClaims
-	}
 	tokenClamis.UID = uid
 	tokenClamis.AppID = appConf.AppID
 	tokenClamis.Type = "auth"
 	tokenClamis.ExpiresAt = jwt.NewNumericDate(time.Unix(rspBody.TokenExpireTime, 0))
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, &tokenClamis)
-	referralClamis.UID = uid
-	referralClamis.AppID = appConf.AppID
-	referralClamis.Type = "referral"
-	referralToken := jwt.NewWithClaims(jwt.SigningMethodHS256, &referralClamis)
 	rspBody.Token, err = token.SignedString([]byte(conf.Token().Secret))
-	fmt.Println("tokenStr", rspBody.Token)
-	fmt.Println("key", conf.Token().Secret)
 	if err != nil {
 		logCtx.Error().Err(err).Msg("Failed to sign token")
 		http.Error(w, "Failed to sign token", http.StatusInternalServerError)
 		return
 	}
-	rspBody.ReferralCode, err = referralToken.SignedString([]byte(conf.Token().Secret))
-	if err != nil {
-		logCtx.Error().Err(err).Msg("Failed to sign referral code")
-		http.Error(w, "Failed to sign referral code", http.StatusInternalServerError)
-		return
-	}
+	rspBody.ReferralCode = fmt.Sprintf("%d", uid)
 	json.NewEncoder(w).Encode(rspBody)
 }
