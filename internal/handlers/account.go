@@ -81,7 +81,7 @@ func AuthHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var uid uint64
-	err = db.Instance().QueryRow("select uid from users where openid = ?", openID).Scan(&uid)
+	err = db.Instance().QueryRow("select uid from users where openid = ? and appid = ?", openID, appConf.AppID).Scan(&uid)
 	if err != nil {
 		logCtx.Error().Err(err).Msg("Failed to select user")
 		http.Error(w, "Failed to select user", http.StatusInternalServerError)
